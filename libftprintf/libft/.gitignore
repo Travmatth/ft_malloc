@@ -1,0 +1,15 @@
+arr/*.o
+io/*.o
+lst/*.o
+mem/*.o
+misc/*.o
+nbr/*.o
+str/*.o
+*.o
+libft.a
+*.dSYM/
+*.swp
+test
+*gch
+*.a
+*nfs*

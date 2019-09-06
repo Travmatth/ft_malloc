@@ -1,0 +1,11 @@
+*.dSYM
+*.o
+._*
+*.out*
+libft/.nfs*
+srcs/.nfs*
+srcs/objs/**/*.o*
+test/
+libftprintf.a
+!test/Makefile
+!test/main.c
