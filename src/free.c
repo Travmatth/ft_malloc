@@ -6,13 +6,13 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:20 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/06 07:20:54 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/16 14:39:58 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void	free(void *pointer)
+void __attribute__((visibility("default"))) free(void *pointer)
 {
 	(void)pointer;
 	return ;

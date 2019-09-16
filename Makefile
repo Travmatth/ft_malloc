@@ -12,9 +12,8 @@ ifdef LEAKS
 endif
 
 NAME = libft_malloc_$(HOSTTYPE).so
-LIBFT = libftprintf/libftprintf.a
-CFLAGS = -Wall -Wextra -Werror -Wpedantic
-LDFLAGS = -Llibftprintf -lftprintf -I./includes -shared
+CFLAGS = -Wall -Wextra -Werror -Wpedantic -fvisibility=hidden
+LDFLAGS = -I./includes -shared
 CORE = malloc realloc free
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))
@@ -28,13 +27,10 @@ $(SUBMODULES):
 		@git submodule init
 		@git submodule update
 
-$(LIBFT):
-		@$(MAKE) -C libftprintf
-
 $(OBJ): %.o: %.c
 		@$(CC) -c $(DEBUG) -I. $(CFLAGS) $< -o $@
 
-$(NAME): $(LIBFT) $(OBJ)
+$(NAME): $(OBJ)
 		@echo -n 'Compiling ft_malloc... '
 		@$(CC) $(DEBUG) $(CFLAGS) $(LDFLAGS) $^ -o $@
 		@rm -f libft_malloc.so
@@ -42,13 +38,11 @@ $(NAME): $(LIBFT) $(OBJ)
 		@echo "\033[32mdone\033[0m"
 
 clean:
-		@$(MAKE) clean -C libftprintf
 		@echo -n 'Cleaning ft_malloc object files... '
 		@rm -rf $(OBJ) *.dSYM *.DS_Store *.so
 		@echo "\033[32mdone\033[0m"
 
 fclean: clean
-		@$(MAKE) fclean -C libftprintf
 		@echo -n 'Cleaning ft_malloc executable... '
 		@rm -rf *.so $(NAME)
 		@echo "\033[32mdone\033[0m"

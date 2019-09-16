@@ -2,16 +2,15 @@
 
 ## USE
 ## REQUIREMENTS
-- The library must be named libft_malloc_$HOSTTYPE.so.
-- A Makefile or something similar must compile the project and must contain the usual rules. It must recompile and re-link the program only if necessary.
-- Your Makefile will have to check the existence of the environment variable $HOSTTYPE. If it is empty or non-existant, to assign the following value:
+- [x] The library must be named libft_malloc_$HOSTTYPE.so.
+- [x] Your Makefile will have to check the existence of the environment variable $HOSTTYPE. If it is empty or non-existant, to assign the following value:
 ```
 ‘uname -m‘_‘uname -s‘
 ifeq ($(HOSTTYPE),)
 HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 ```
-- Your Makefile will have to create a symbolic link libft_malloc.so pointing to libft_malloc_$HOSTTYPE.so so for example:
+- [x] Your Makefile will have to create a symbolic link libft_malloc.so pointing to libft_malloc_$HOSTTYPE.so so for example:
 `libft_malloc.so -> libft_malloc_intel-mac.so`
 - You are allowed a global variable to manage your allocations and one for the threadsafe.
 This mini project is about writing a dynamic allocation memory management library. So that you can use it with some programs already in use without modifying them or recompiling, you must rewrite the following libc functions malloc(3), free(3) and realloc(3).
