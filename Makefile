@@ -14,7 +14,7 @@ endif
 NAME = libft_malloc_$(HOSTTYPE).so
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -fvisibility=hidden
 LDFLAGS = -I./includes -shared
-CORE = malloc realloc free
+CORE = malloc realloc free arena
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))
 OBJ = $(SRC:.c=.o)

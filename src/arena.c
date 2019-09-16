@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   arena.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/09/06 06:47:20 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/16 15:09:09 by tmatthew         ###   ########.fr       */
+/*   Created: 2019/09/16 14:46:11 by tmatthew          #+#    #+#             */
+/*   Updated: 2019/09/16 15:29:35 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void	free(void *pointer)
-{
-	if (pointer != NULL)
-	{
-		(void)pointer;
-	}
-}
+void	*g_tiny_bin;
+void	*g_small_bin;
+void	*g_large_bin;
+void	*g_free_bin;

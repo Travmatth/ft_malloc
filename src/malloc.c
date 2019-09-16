@@ -6,19 +6,14 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/16 14:41:43 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/16 15:31:00 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void											testing(size_t sz)
+void	*malloc(size_t size)
 {
-	(void)sz;
-}
-
-void	__attribute__((visibility("default")))	*malloc(size_t size)
-{
-	testing(size);
+	(void)size;
 	return (NULL);
 }
