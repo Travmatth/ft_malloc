@@ -12,8 +12,10 @@ ifdef LEAKS
 endif
 
 NAME = libft_malloc_$(HOSTTYPE).so
+TESTNAME = malloc_test
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -fvisibility=hidden
 LDFLAGS = -I./includes -shared
+TESTFLAGS = -I./includes -L. -lft_malloc
 CORE = malloc realloc free arena
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))
@@ -37,9 +39,13 @@ $(NAME): $(OBJ)
 		@ln -s $(NAME) libft_malloc.so
 		@echo "\033[32mdone\033[0m"
 
+test: all
+		@$(CC) $(DEBUG) $(TESTFLAGS) test/* -o $(TESTNAME)
+		@./$(TESTNAME)
+
 clean:
 		@echo -n 'Cleaning ft_malloc object files... '
-		@rm -rf $(OBJ) *.dSYM *.DS_Store *.so
+		@rm -rf $(OBJ) *.dSYM *.DS_Store *.so $(TESTNAME)
 		@echo "\033[32mdone\033[0m"
 
 fclean: clean
