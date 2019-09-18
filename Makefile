@@ -11,6 +11,7 @@ ifdef LEAKS
 		DEBUG = -g
 endif
 
+IS_DEBUG = 
 NAME = libft_malloc_$(HOSTTYPE).so
 TESTNAME = malloc_test
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -fvisibility=hidden
@@ -30,7 +31,7 @@ $(SUBMODULES):
 		@git submodule update
 
 $(OBJ): %.o: %.c
-		@$(CC) -c $(DEBUG) -I. $(CFLAGS) $< -o $@
+		@$(CC) -c $(DEBUG) $(IS_DEBUG) -I. $(CFLAGS) $< -o $@
 
 $(NAME): $(OBJ)
 		@echo -n 'Compiling ft_malloc... '
@@ -39,8 +40,13 @@ $(NAME): $(OBJ)
 		@ln -s $(NAME) libft_malloc.so
 		@echo "\033[32mdone\033[0m"
 
-test: all
-		@$(CC) $(DEBUG) $(TESTFLAGS) test/* -o $(TESTNAME)
+set-debug:
+		$(eval IS_DEBUG='-D__DEBUG__') 
+
+debug: set-debug all
+
+test: debug
+		@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/* -o $(TESTNAME)
 		@./$(TESTNAME)
 
 clean:
