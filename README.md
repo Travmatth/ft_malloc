@@ -108,7 +108,8 @@ Functionality tests
 Start by making yourself a launch script that only changes the environment variables when it's time to run a test program. It should be named run.sh, and be executable:
 ```
 $> cat run.sh
-#! / Bin / sh export DYLD_LIBRARY_PATH =.
+#!/Bin/sh
+export DYLD_LIBRARY_PATH =.
 export DYLD_INSERT_LIBRARIES = "libft_malloc.so"
 export DYLD_FORCE_FLAT_NAMESPACE = 1 $ @
 ```

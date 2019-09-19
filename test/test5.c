@@ -1,13 +1,19 @@
-#include
+#include <stdlib.h>
 
-int main ()
+void show_alloc_mem(void);
+
+int main()
 {
-    malloc (1024);
-    malloc (1024 * 32);
-    malloc (1024 * 1024);
-    malloc (1024 * 1024 * 16);
-    malloc (1024 * 1024 * 128);
-    show_alloc_mem ();
-    return (0);
-}
+	void *addr;
 
+	addr = malloc(16);
+	addr = malloc(512);
+	addr = malloc(1024);
+	addr = malloc(1024 * 32);
+	addr = malloc(1024 * 1024);
+	addr = malloc(1024 * 1024 * 16);
+	addr = malloc(1024 * 1024 * 128);
+
+	show_alloc_mem();
+	return (0);
+}

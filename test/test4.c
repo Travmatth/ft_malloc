@@ -1,20 +1,20 @@
-#include
-#include
-#include
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 
-void print (char * s)
+void print(char *s)
 {
-    write (1, s, strlen (s));
+	write(1, s, strlen(s));
 }
 
-int main ()
+int	main()
 {
-    char * addr;
+	char *addr;
 
-    addr = malloc (16);
-    free (NULL);
-    free ((void *) addr + 5);
-    if (realloc ((void *) addr + 5, 10) == NULL)
-    print ( "Hello \ n");
+	addr = malloc(16);
+	free(NULL);
+	free(addr + 5);
+	if (realloc(addr + 5, 10) == NULL)
+		print("Bonjours\n");
+	return (0);
 }
-

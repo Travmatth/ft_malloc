@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/18 17:32:26 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/19 13:37:02 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ t_chunk	*next_free_chunk(t_chunk **last, size_t size, void *bin);
 ** Exported functions
 */
 
+void	show_alloc_mem() __attribute__((visibility("default")));
 void	*malloc(size_t size) __attribute__((visibility("default")));
 void	*realloc(void *ptr, size_t size) __attribute__((visibility("default")));
 void	free(void *ptr) __attribute__((visibility("default")));
