@@ -39,9 +39,11 @@ $(NAME): $(OBJ)
 set-debug:
 		$(eval IS_DEBUG='-D__DEBUG__') 
 
-debug: set-debug all
+test-debug: set-debug all
+		@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/* -o $(TESTNAME)
+		@./$(TESTNAME)
 
-test: debug
+test: all
 		@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/* -o $(TESTNAME)
 		@./$(TESTNAME)
 

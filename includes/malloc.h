@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/18 17:02:47 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/18 17:15:32 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@
 # define DEBUG_LOG(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__)
 # define DEBUG_PRINT(str) fprintf(stderr, str)
 #else
-# define DEBUG_(fmt, ...) do {} while (0)
+# define DEBUG_LOG(fmt, ...) do {} while (0)
 # define DEBUG_PRINT(str) do {} while (0)
 #endif
 
