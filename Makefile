@@ -17,7 +17,7 @@ TESTNAME = malloc_test
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -fvisibility=hidden
 LDFLAGS = -I./includes -shared
 TESTFLAGS = -I./includes -L. -lft_malloc
-CORE = malloc realloc free arena
+CORE = malloc realloc free blocks
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))
 OBJ = $(SRC:.c=.o)
