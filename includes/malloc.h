@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/19 13:37:02 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/19 14:11:15 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 ** Breakpoints used to determine which bin to procure allocated memory from
 */
 
-# define PAGE_SIZE 4000
+# define PAGE_SIZE ((size_t)getpagesize())
 # define IS_TINY(x) (x < 500)
 # define IS_SMALL(x) (x >= 500)
 # define IS_LARGE(x) (x >= PAGE_SIZE)
