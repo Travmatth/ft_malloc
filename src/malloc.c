@@ -6,15 +6,13 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/18 17:07:43 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/18 17:50:13 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void	*g_tiny_bin;
-void	*g_small_bin;
-void	*g_large_bin;
+t_bins	g_bins;
 
 void	split_block(t_chunk *chunk, size_t size)
 {
@@ -69,7 +67,7 @@ void	*malloc(size_t size)
 		return (NULL);
 	else if (IS_LARGE(size))
 		return (procure_large(size));
-	bin = IS_TINY(size) ? &g_tiny_bin : &g_small_bin;
+	bin = IS_TINY(size) ? &g_bins.g_tiny_bin : &g_bins.g_small_bin;
 	bin_size = IS_TINY(size) ? TINY_SIZE : SMALL_SIZE;
 	return (procure_pointer(size, bin, bin_size));
 }

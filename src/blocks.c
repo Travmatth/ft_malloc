@@ -6,11 +6,19 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 15:07:24 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/18 17:08:08 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/18 17:21:56 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
+
+/*
+** Convert an allocated pointer into it's parent chunk
+*/
+t_chunk	*get_chunk_pointer(void *pointer)
+{
+	return ((t_chunk *)pointer - 1);
+}
 
 /*
 ** Wrapper to mmap to detect failed mapping

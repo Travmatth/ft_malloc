@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/18 17:15:32 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/18 17:32:26 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 ** sys/mman.h - PROT_READ, PROT_WRITE, MAP_ANON, MAP_PRIVATE
 */
 
+# include <signal.h>
 # include <stddef.h>
 # include <unistd.h>
 # include <sys/mman.h>
@@ -80,10 +81,15 @@ typedef struct		s_chunk {
 # define TINY_SIZE (2 * MB)
 # define SMALL_SIZE (16 * MB)
 
-extern void	*g_tiny_bin;
-extern void	*g_small_bin;
-extern void	*g_large_bin;
+typedef struct	s_bins {
+	void		*g_tiny_bin;
+	void		*g_small_bin;
+	void		*g_large_bin;
+}				t_bins;
 
+extern t_bins	g_bins;
+
+t_chunk	*get_chunk_pointer(void *pointer);
 t_chunk	*request_space(t_chunk *last, size_t size);
 t_chunk	*next_free_chunk(t_chunk **last, size_t size, void *bin);
 
