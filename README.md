@@ -69,7 +69,8 @@ Total : 52698 bytes
 - [how to write your own malloc and free](http://tharikasblogs.blogspot.com/p/how-to-write-your-own-malloc-and-free.html)
 
 Correction:
-#Test 1:
+
+# Test 1:
 We will start by checking that the compilation of the library generates the files requested in the subject, by modifying HOSTTYPE:
 ```
 $> export HOSTTYPE = Testing
@@ -83,7 +84,7 @@ $>
 
 The Makefile uses HOSTTYPE to set the libraire's name (libft_malloc_ $ HOSSTYPE.so) and creates a symbolic link libft_malloc.so pointing to libft_malloc_ $ HOSSTYPE.so?
 
-#Test 2:
+# Test 2:
 Export functions
 Check with nm that the library exports the functions malloc, free, realloc and show_alloc_mem.
 
@@ -112,7 +113,7 @@ export DYLD_INSERT_LIBRARIES = "libft_malloc.so"
 export DYLD_FORCE_FLAT_NAMESPACE = 1 $ @
 ```
 
-#Test 3:
+# Test 3:
 Malloc test
 We will make a first test program that does not malloc, in order to have a basis of comparison:
 ```
@@ -139,7 +140,7 @@ $>
 We will then add a malloc, and write in each allocation to ensure that the memory page is allocated in physical memory by the MMU.
 The system really only allocates the memory of a page when written from inside, so even making a larger mmap than the malloc request does not change the "page reclaims".
 
-#Test 4
+# Test 4
 ```
 $> gcc -o test1 test1.c
 $> / usr / bin / time -l ./test1
@@ -216,7 +217,7 @@ Pre-allocated zones
 Check in the source code that the pre-allocated areas according to the different sizes of malloc can store at least 100 times the maximum size for this type of zone.
 Also check that the size of the fields is a multiple of getpagesize ().
 
-#Test 5
+# Test 5
 Free tests
 We will simply add a free to our test program:
 
@@ -234,7 +235,7 @@ Does free works? (less "reclaims pages" than test1)
 
 test2 has maximum 3 "page reclaims" in addition to test0?
 
-#Test 6
+# Test 6
 
 Realloc test
 
@@ -248,7 +249,7 @@ $>
 
 It works as in the example?
 
-#Test 7
+# Test 7
 Realloc ++ test
 In test3.c, change the body of the main function as follows:
 
@@ -267,7 +268,7 @@ Hello
 In case of error, realloc should return NULL. Is "Bonjours" displayed as in the example?
 If the program reacts unhealthily (segfault or others), the defense stops and you must select Crash at the top of the scale.
 
-#Test 8
+# Test 8
 Show_alloc_mem test
 
 ```
@@ -277,7 +278,7 @@ $> ./test5
 
 The display corresponds to the subject and to the TINY / SMALL / LARGE distribution of the project?
 
-#Test 9: Bonus
+# Test 9: Bonus
 Competitive access
 The project manages the competitive access of the threads thanks to the pthread library and the mutexes.
 
