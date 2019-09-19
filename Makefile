@@ -24,11 +24,7 @@ OBJ = $(SRC:.c=.o)
 
 .PHONY = all clean fclean re
 
-all: $(SUBMODULES) $(NAME)
-
-$(SUBMODULES):
-		@git submodule init
-		@git submodule update
+all: $(NAME)
 
 $(OBJ): %.o: %.c
 		@$(CC) -c $(DEBUG) $(IS_DEBUG) -I. $(CFLAGS) $< -o $@
