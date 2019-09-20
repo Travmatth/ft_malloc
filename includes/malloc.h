@@ -6,12 +6,14 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/19 14:11:15 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/20 14:26:48 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 # define MALLOC_H
+
+# define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 /*
 ** stddef.h - NULL
@@ -72,22 +74,30 @@ typedef struct		s_chunk {
 
 /*
 ** Bins used to reference mmapped sections of memory
-** g_tiny_bin: allocations < 1kb
-** g_small_bin: allocations >= 1kb && < 4kb
-** g_large_bin: allocations > 4kb
+** tiny_bin: allocations < 1kb
+** small_bin: allocations >= 1kb && < 4kb
+** large_bin: allocations > 4kb
 */
 
 # define MB 1000000
 # define TINY_SIZE (2 * MB)
 # define SMALL_SIZE (16 * MB)
 
+/*
+** Global variable used to store reference to memory bins
+*/
+
 typedef struct	s_bins {
-	void		*g_tiny_bin;
-	void		*g_small_bin;
-	void		*g_large_bin;
+	void		*tiny_bin;
+	void		*small_bin;
+	void		*large_bin;
 }				t_bins;
 
 extern t_bins	g_bins;
+
+/*
+** Internal functions
+*/
 
 t_chunk	*get_chunk_pointer(void *pointer);
 t_chunk	*request_space(t_chunk *last, size_t size);
@@ -101,5 +111,4 @@ void	show_alloc_mem() __attribute__((visibility("default")));
 void	*malloc(size_t size) __attribute__((visibility("default")));
 void	*realloc(void *ptr, size_t size) __attribute__((visibility("default")));
 void	free(void *ptr) __attribute__((visibility("default")));
-
 #endif

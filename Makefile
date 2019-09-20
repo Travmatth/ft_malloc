@@ -27,34 +27,36 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(OBJ): %.o: %.c
-		@$(CC) -c $(DEBUG) $(IS_DEBUG) -I. $(CFLAGS) $< -o $@
+	@$(CC) -c $(DEBUG) $(IS_DEBUG) -I. $(CFLAGS) $< -o $@
 
 $(NAME): $(OBJ)
-		@echo -n 'Compiling ft_malloc... '
-		@$(CC) $(DEBUG) $(CFLAGS) $(LDFLAGS) $^ -o $@
-		@rm -f libft_malloc.so
-		@ln -s $(NAME) libft_malloc.so
-		@echo "\033[32mdone\033[0m"
+	@echo -n 'Compiling ft_malloc... '
+	@$(CC) $(DEBUG) $(CFLAGS) $(LDFLAGS) $^ -o $@
+	@rm -f libft_malloc.so
+	@ln -s $(NAME) libft_malloc.so
+	@echo "\033[32mdone\033[0m"
+
+debug: set-debug all
 
 set-debug:
-		$(eval IS_DEBUG='-D__DEBUG__') 
+	$(eval IS_DEBUG='-D__DEBUG__') 
 
-test-debug: set-debug all
-		@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/* -o $(TESTNAME)
-		@./$(TESTNAME)
+test-debug: fclean set-debug all
+	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/$(TEST) -o $(TESTNAME)
+	@./$(TESTNAME)
 
-test: all
-		@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/* -o $(TESTNAME)
-		@./$(TESTNAME)
+test: fclean all
+	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/$(TEST) -o $(TESTNAME)
+	@./$(TESTNAME)
 
 clean:
-		@echo -n 'Cleaning ft_malloc object files... '
-		@rm -rf $(OBJ) *.dSYM *.DS_Store *.so $(TESTNAME)
-		@echo "\033[32mdone\033[0m"
+	@echo -n 'Cleaning ft_malloc object files... '
+	@rm -rf $(OBJ) *.dSYM *.DS_Store *.so $(TESTNAME)
+	@echo "\033[32mdone\033[0m"
 
 fclean: clean
-		@echo -n 'Cleaning ft_malloc executable... '
-		@rm -rf *.so $(NAME)
-		@echo "\033[32mdone\033[0m"
+	@echo -n 'Cleaning ft_malloc executable... '
+	@rm -rf *.so $(NAME)
+	@echo "\033[32mdone\033[0m"
 
 re: fclean all

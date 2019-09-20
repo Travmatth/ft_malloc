@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:20 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/18 17:49:55 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/19 14:39: 1by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ void	free(void *pointer)
 {
 	t_chunk	*chunk;
 
-	if (pointer == NULL)
+	if (pointer == NULL || (size_t)pointer % 8)
 		return ;
-	DEBUG_LOG("Freeing pointer: %p", pointer);
+	DEBUG_LOG("Freeing pointer: %p\n", pointer);
 	chunk = get_chunk_pointer(pointer);
 	if (!(chunk->metadata & FREE))
 	{
-		DEBUG_LOG("Error: Attempt to free unallocated chunk %p", pointer);
-		raise(SIGSEGV);
+		DEBUG_LOG("Error: Attempt to free unallocated chunk %p\n", pointer);
+		// raise(SIGSEGV);
 	}
 	chunk->metadata &= ~FREE;
-	coalesce_bin(g_bins.g_tiny_bin);
-	coalesce_bin(g_bins.g_small_bin);
-	coalesce_bin(g_bins.g_large_bin);
+	coalesce_bin(g_bins.tiny_bin);
+	coalesce_bin(g_bins.small_bin);
+	coalesce_bin(g_bins.large_bin);
 }
