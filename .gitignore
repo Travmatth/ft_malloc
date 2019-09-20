@@ -1,3 +1,4 @@
 **/*.o
 *.so
 malloc_test*.dSYM
+malloc_test
