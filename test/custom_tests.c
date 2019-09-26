@@ -1,6 +1,3 @@
-// #include <stdio.h>
-// #include <stdint.h>
-// #include <string.h>
 #include "../includes/malloc.h"
 
 int	test_cpy() {
@@ -77,7 +74,7 @@ int		(*funcs[4])(void) = {
 };
 
 int		main(void) {
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (funcs[i]()) {
 			return 1;
 		}
