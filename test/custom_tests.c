@@ -1,4 +1,5 @@
-#include "../includes/malloc.h"
+#include <string.h>
+#include "../malloc.h"
 
 int	test_cpy() {
 	int *arr = malloc(sizeof(int*))
@@ -8,7 +9,7 @@ int	test_cpy() {
 	for (int i = 0; i < 5; i++) {
 		arr[i] = i;
 	}
-	ft_memcpy(next, arr, sizeof(int) * 5);
+	memcpy(next, arr, sizeof(int) * 5);
 	for (int i = 0; i < 5; i++) {
 		if (next[i] != i) {
 			return (1);

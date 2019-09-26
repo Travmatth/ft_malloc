@@ -17,7 +17,7 @@ LIBFT = libftprintf/libftprintf.a
 TESTNAME = malloc_test
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 LDFLAGS = -Llibftprintf -lftprintf -I./includes
-DYLIB = -shared -exported_symbols_list export_syms 
+DYLIB = -shared -exported_symbols_list exported.syms 
 TESTFLAGS = -I./includes -L. -lft_malloc
 CORE = malloc realloc free chunks show_alloc
 FILES = $(addprefix src/, $(CORE))
@@ -50,7 +50,7 @@ test-debug: set-debug all
 	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) $(LDFLAGS) test/$(CASE) -o $(TESTNAME)
 
 test: all
-	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/$(CASE) -o $(TESTNAME)
+	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) $(LDFLAGS) test/$(CASE) -o $(TESTNAME)
 
 clean:
 	@$(MAKE) clean -C libftprintf

@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   malloc.h                                           :+:      :+:    :+:   */
+/*   internal.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/25 22:10:54 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/26 13:55:30 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MALLOC_H
-# define MALLOC_H
+#ifndef MALLOC_INTERNAL_H
+# define MALLOC_INTERNAL_H
 
 # define MIN(x, y) ((x) < (y) ? (x) : (y))
 
@@ -50,19 +50,22 @@
 enum	e_block_flags {
 	ALLOCED = (1u << 0),
 	BLOCK = (1u << 1),
+	TINY_BIN = (1u << 2),
+	SMALL_BIN = (1u << 3),
+	LARGE_BIN = (1u << 4),
 };
 
 /*
 ** Global variable used to store reference to memory bins
 */
 
-typedef struct	s_bins {
-	void		*tiny_bin;
-	void		*small_bin;
-	void		*large_bin;
-}				t_bins;
+typedef struct		s_bins {
+	void			*tiny_bin;
+	void			*small_bin;
+	void			*large_bin;
+}					t_bins;
 
-extern t_bins	g_bins;
+extern t_bins		g_bins;
 
 /*
 ** Chunk struct used to store information about the mmapped memory
@@ -114,15 +117,15 @@ typedef struct		s_chunk {
 ** Internal functions
 */
 
-t_chunk	*request_space(t_chunk *last, size_t size);
-t_chunk	*next_free_chunk(t_chunk **last, size_t size, void *bin);
+t_chunk				*request_space(t_chunk *last, size_t size);
+t_chunk				*next_free_chunk(t_chunk **last, size_t size, void *bin);
 
 /*
 ** Exported functions
 */
 
-void	show_alloc_mem();
-void	*malloc(size_t size);
-void	*realloc(void *ptr, size_t size);
-void	free(void *ptr);
+void				show_alloc_mem();
+void				*malloc(size_t size);
+void				*realloc(void *ptr, size_t size);
+void				free(void *ptr);
 #endif

@@ -6,11 +6,11 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:48:33 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/24 13:00:14 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/26 13:46:05 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/malloc.h"
+#include "../includes/internal.h"
 
 void	*realloc(void *pointer, size_t size)
 {

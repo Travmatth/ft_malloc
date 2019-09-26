@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/malloc.h"
+#include "../includes/internal.h"
 
 /*
 ** Iterate over given bin and combine consecutive free chunks
@@ -21,13 +21,18 @@ void	coalesce_bin(void *bin)
 	(void)bin;
 }
 
+void	free_large_bin(t_chunk *chunk)
+{
+	g_bins.large_bin = chunk->next;
+	munmap(chunk, META_SIZE + OFFSET + chunk->size);
+}
+
 /*
 ** Mark given pointer as a free chunk
 */
 
 void	free(void *pointer)
 {
-	// (void)pointer;
 	t_chunk	*chunk;
 
 	if (pointer == NULL || (size_t)pointer % 8)
@@ -40,7 +45,8 @@ void	free(void *pointer)
 		errno = ENOMEM;
 	}
 	chunk->metadata &= ~ALLOCED;
-	// coalesce_bin(g_bins.tiny_bin);
-	// coalesce_bin(g_bins.small_bin);
-	// coalesce_bin(g_bins.large_bin);
+	if (chunk->metadata & LARGE_BIN)
+		free_large_bin(chunk);
+	else
+		coalesce_bin(chunk);
 }

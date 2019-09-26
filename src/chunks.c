@@ -6,11 +6,11 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 15:07:24 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/25 20:28:04 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/26 13:46:05 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/malloc.h"
+#include "../includes/internal.h"
 
 /*
 ** Wrapper to mmap to detect failed mapping

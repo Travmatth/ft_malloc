@@ -6,11 +6,11 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/25 21:36:59 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/26 13:57:50 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/malloc.h"
+#include "../includes/internal.h"
 
 t_bins	g_bins;
 
@@ -53,7 +53,7 @@ void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 	else if (chunk->size > META_SIZE + aligned + OFFSET)
 		split_block(chunk, aligned);
 	chunk->size = aligned;
-	chunk->metadata |= ALLOCED;
+	chunk->metadata |= (ALLOCED | (IS_TINY(size) ? TINY_BIN : SMALL_BIN));
 	ptr = GET_MEM_POINTER(chunk);
 	if ((size_t)ptr % alignof(max_align_t))
 		printf("ERROR: Unaligned ptr procured\n");
