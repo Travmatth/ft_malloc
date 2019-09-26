@@ -93,18 +93,24 @@ int test_5()
 	addr = malloc(1024 * 1024);
 	addr = malloc(1024 * 1024 * 16);
 	addr = malloc(1024 * 1024 * 128);
-
 	show_alloc_mem();
 	return (0);
 }
 
+int		(*funcs[6])(void) = {
+	test_1,
+	test_2,
+	test_3,
+	test_3_1,
+	test_4,
+	test_5,
+};
 
 int		main(void) {
-	test_1();
-	test_2();
-	test_3();
-	test_3_1();
-	test_4();
-	test_5();
+	for (int i = 0; i < 6; i++) {
+		if (funcs[i]()) {
+			return 1;
+		}
+	}
 	return 0;
 }

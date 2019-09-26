@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/20 14:24:26 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/25 21:36:59 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,15 @@ void	split_block(t_chunk *chunk, size_t size)
 	char	*next;
 	t_chunk	*next_chunk;
 
-	next = (char*)(chunk) + META_SIZE + size;
+	size += META_SIZE + OFFSET;
+	next = (char*)(chunk) + size;
 	next_chunk = (t_chunk*)next;
-	next_chunk->size = chunk->size - size - META_SIZE;
+	next_chunk->size = chunk->size - size;
 	next_chunk->metadata = 0;
 	next_chunk->next = NULL;
+	if (chunk->next != NULL)
+		next_chunk->next = chunk->next;
+	chunk->next = next_chunk;
 	DEBUG_LOG("Chunk %p extra space broken into new chunk %p\n"
 			, (void*)chunk
 			, (void*)next_chunk);
@@ -31,42 +35,53 @@ void	split_block(t_chunk *chunk, size_t size)
 
 void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 {
-	t_chunk	*last;
+	void	*ptr;
 	t_chunk	*chunk;
+	t_chunk	*last;
+	size_t	aligned;
 
 	DEBUG_PRINT("Procuring memory for bin allocation\n");
+	aligned = size + ((alignof(max_align_t) - size) % alignof(max_align_t));
+	last = (t_chunk*)*bin;
 	if (!*bin && !(*bin = request_space(NULL, bin_size)))
 		return (NULL);
-	last = (t_chunk*)*bin;
-	if ((chunk = next_free_chunk(&last, size, *bin)) == NULL)
+	if ((chunk = next_free_chunk(&last, aligned, *bin)) == NULL)
 	{
-		if ((chunk = request_space(last, size)) == NULL)
+		if ((chunk = request_space(last, bin_size)) == NULL)
 			return (chunk);
 	}
-	else if (chunk->size > size + META_SIZE)
-		split_block(chunk, size);
-	chunk->metadata |= FREE;
-	return ((void*)(chunk + 1));
+	else if (chunk->size > META_SIZE + aligned + OFFSET)
+		split_block(chunk, aligned);
+	chunk->size = aligned;
+	chunk->metadata |= ALLOCED;
+	ptr = GET_MEM_POINTER(chunk);
+	if ((size_t)ptr % alignof(max_align_t))
+		printf("ERROR: Unaligned ptr procured\n");
+	DEBUG_LOG("Malloc returning pointer: %p\n", ptr);
+	return (ptr);
 }
 
 void	*procure_large(size_t size)
 {
 	t_chunk	*last;
 	t_chunk	*chunk;
+	void	*bin;
+	void	*ptr;
 
 	DEBUG_PRINT("Procuring memory for large allocation\n");
-	if (!g_bins.large_bin && !(g_bins.large_bin = request_space(NULL, size)))
+	bin = g_bins.large_bin;
+	if (!bin && !(bin = request_space(NULL, META_SIZE + size + OFFSET)))
 		return (NULL);
-	last = (t_chunk*)g_bins.large_bin;
-	if ((chunk = next_free_chunk(&last, size, g_bins.large_bin)) == NULL)
+	if ((chunk = next_free_chunk(&last, size, bin)) == NULL)
 	{
-		if ((chunk = request_space(last, size)) == NULL)
+		if ((chunk = request_space(last, META_SIZE + size + OFFSET)) == NULL)
 			return (chunk);
 	}
-	else if (chunk->size > size + META_SIZE)
-		split_block(chunk, size);
-	chunk->metadata |= FREE;
-	return ((void*)(chunk + 1));
+	chunk->metadata |= ALLOCED;
+	chunk->size = size;
+	ptr = GET_MEM_POINTER(chunk);
+	DEBUG_LOG("Malloc returning pointer: %p\n", ptr);
+	return (ptr);
 }
 
 void	*malloc(size_t size)

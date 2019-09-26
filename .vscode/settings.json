@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "malloc.h": "c"
+        "malloc.h": "c",
+        "libft.h": "c",
+        "cstddef": "c"
     }
 }

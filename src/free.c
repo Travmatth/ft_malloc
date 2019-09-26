@@ -27,19 +27,20 @@ void	coalesce_bin(void *bin)
 
 void	free(void *pointer)
 {
+	// (void)pointer;
 	t_chunk	*chunk;
 
 	if (pointer == NULL || (size_t)pointer % 8)
 		return ;
-	DEBUG_LOG("Freeing pointer: %p\n", pointer);
-	chunk = get_chunk_pointer(pointer);
-	if (!(chunk->metadata & FREE))
+	chunk = GET_CHUNK_POINTER(pointer);
+	DEBUG_LOG("Freeing pointer: %p from chunk: %p\n", pointer, (void*)chunk);
+	if (!(chunk->metadata & ALLOCED))
 	{
 		DEBUG_LOG("Error: Attempt to free unallocated chunk %p\n", pointer);
-		// raise(SIGSEGV);
+		errno = ENOMEM;
 	}
-	chunk->metadata &= ~FREE;
-	coalesce_bin(g_bins.tiny_bin);
-	coalesce_bin(g_bins.small_bin);
-	coalesce_bin(g_bins.large_bin);
+	chunk->metadata &= ~ALLOCED;
+	// coalesce_bin(g_bins.tiny_bin);
+	// coalesce_bin(g_bins.small_bin);
+	// coalesce_bin(g_bins.large_bin);
 }

@@ -1,25 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   blocks.c                                           :+:      :+:    :+:   */
+/*   chunks.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 15:07:24 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/20 09:41:56 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/25 20:28:04 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
-
-/*
-** Convert an allocated pointer into it's parent chunk
-*/
-
-t_chunk	*get_chunk_pointer(void *pointer)
-{
-	return ((t_chunk *)pointer - 1);
-}
 
 /*
 ** Wrapper to mmap to detect failed mapping
@@ -31,7 +22,7 @@ void	*alloc_mem(size_t size)
 
 	ret = mmap(NULL, size, MMAP_PROTECTIONS, MMAP_FLAGS, 0, 0);
 	if (ret == MAP_FAILED)
-		return NULL;
+		return (NULL);
 	return (ret);
 }
 
@@ -43,14 +34,15 @@ t_chunk	*request_space(t_chunk *last, size_t size)
 {
 	t_chunk	*chunk;
 
-	DEBUG_LOG("Calling mmap for %zu bytes (excluding metadata)\n", size);
-	if ((chunk = alloc_mem(size + META_SIZE)) == NULL)
+	DEBUG_LOG("Calling mmap for %zu bytes\n", size);
+	if ((chunk = (t_chunk*)alloc_mem(size)) == NULL)
 		return (chunk);
 	if (last)
 		last->next = chunk;
 	chunk->size = size;
 	chunk->next = NULL;
-	chunk->metadata |= FREE;
+	chunk->metadata = 0;
+	chunk->metadata |= BLOCK;
 	return (chunk);
 }
 
@@ -60,17 +52,17 @@ t_chunk	*request_space(t_chunk *last, size_t size)
 
 t_chunk	*next_free_chunk(t_chunk **last, size_t size, void *bin)
 {
-	t_chunk	*current;
+	t_chunk	*curr;
 
-	current = (t_chunk *)bin;
-	while (current && !((current->metadata & FREE) && current->size >= size))
+	curr = (t_chunk *)bin;
+	while (curr && (!!(curr->metadata & ALLOCED) || (curr->size < size)))
 	{
-		*last = current;
-		current = current->next;
+		*last = curr;
+		curr = curr->next;
 	}
-	if (current != NULL)
+	if (curr != NULL)
 	{
-		DEBUG_LOG("Free chunk found to allocate: %p\n", (void*)current);
+		DEBUG_LOG("Free chunk found to allocate: %p\n", (void*)curr);
 	}
-	return (current);
+	return (curr);
 }

@@ -13,11 +13,12 @@ endif
 
 IS_DEBUG = 
 NAME = libft_malloc_$(HOSTTYPE).so
+LIBFT = libftprintf/libftprintf.a
 TESTNAME = malloc_test
 CFLAGS = -Wall -Wextra -Werror -Wpedantic -fvisibility=hidden
-LDFLAGS = -I./includes -shared
+LDFLAGS = -Llibftprintf -lftprintf -I./includes -shared
 TESTFLAGS = -I./includes -L. -lft_malloc
-CORE = malloc realloc free blocks show_alloc
+CORE = malloc realloc free chunks show_alloc
 FILES = $(addprefix src/, $(CORE))
 SRC = $(addsuffix .c, $(FILES))
 OBJ = $(SRC:.c=.o)
@@ -26,10 +27,13 @@ OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
 
+$(LIBFT):	
+		@$(MAKE) -C libftprintf
+
 $(OBJ): %.o: %.c
 	@$(CC) -c $(DEBUG) $(IS_DEBUG) -I. $(CFLAGS) $< -o $@
 
-$(NAME): $(OBJ)
+$(NAME): $(LIBFT) $(OBJ)
 	@echo -n 'Compiling ft_malloc... '
 	@$(CC) $(DEBUG) $(CFLAGS) $(LDFLAGS) $^ -o $@
 	@rm -f libft_malloc.so
@@ -41,20 +45,21 @@ debug: set-debug all
 set-debug:
 	$(eval IS_DEBUG='-D__DEBUG__') 
 
-test-debug: fclean set-debug all
-	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/$(TEST) -o $(TESTNAME)
-	@./$(TESTNAME)
+test-debug: set-debug all
+	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/$(CASE) -o $(TESTNAME)
 
-test: fclean all
-	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/$(TEST) -o $(TESTNAME)
+test: all
+	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) test/$(CASE) -o $(TESTNAME)
 	@./$(TESTNAME)
 
 clean:
+	@$(MAKE) clean -C libftprintf
 	@echo -n 'Cleaning ft_malloc object files... '
 	@rm -rf $(OBJ) *.dSYM *.DS_Store *.so $(TESTNAME)
 	@echo "\033[32mdone\033[0m"
 
 fclean: clean
+	@$(MAKE) fclean -C libftprintf
 	@echo -n 'Cleaning ft_malloc executable... '
 	@rm -rf *.so $(NAME)
 	@echo "\033[32mdone\033[0m"
