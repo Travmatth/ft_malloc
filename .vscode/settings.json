@@ -2,6 +2,8 @@
     "files.associations": {
         "malloc.h": "c",
         "libft.h": "c",
-        "cstddef": "c"
+        "cstddef": "c",
+        "internal.h": "c",
+        "stdalign.h": "c"
     }
 }

@@ -2,3 +2,4 @@ _malloc
 _realloc
 _free
 _show_alloc_mem
+_nomalloc_log

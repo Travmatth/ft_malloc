@@ -6,42 +6,43 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/26 13:55:30 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/30 14:27:22 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_INTERNAL_H
 # define MALLOC_INTERNAL_H
 
-# define MIN(x, y) ((x) < (y) ? (x) : (y))
-
 /*
+** stdarg.h - va_list
 ** stddef.h - NULL, alignof, max_align_t
-** unistd.h - mmap
+** unistd.h - mmap, getpagesize
 ** sys/mman.h - PROT_READ, PROT_WRITE, MAP_ANON, MAP_PRIVATE
-** errno - errno
-** stdalign - alignof, max_align_t
+** errno.h - errno
+** stdalign.h - alignof, max_align_t
+** stdint.h - intmax_t, uintmax_t
 */
 
+# include <stdarg.h>
 # include <stddef.h>
 # include <unistd.h>
 # include <sys/mman.h>
 # include <errno.h>
 # include <stdalign.h>
-# include "../libftprintf/srcs/includes/ft_printf.h"
+# include <stdint.h>
 
 /*
-** Debug statements used when compiled with __DEBUG__ variable defined
+** Macros for utils.c
 */
 
-# ifdef __DEBUG__
-#  include <stdio.h>
-#  define DEBUG_LOG(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__)
-#  define DEBUG_PRINT(str) fprintf(stderr, str)
-# else
-#  define DEBUG_LOG(fmt, ...) do {} while (0)
-#  define DEBUG_PRINT(str) do {} while (0)
-# endif
+# define ULL unsigned long long
+# define NOT_LONG_BOUNDARY(X) (((long)X & (sizeof (long) - 1)))
+# define UNALIGNED(X, Y) (NOT_LONG_BOUNDARY(X) | NOT_LONG_BOUNDARY(Y))
+# define BIGBLOCKSIZE (sizeof (long) << 2)
+# define LITTLEBLOCKSIZE (sizeof (long))
+# define TOO_SMALL(LEN) ((LEN) < BIGBLOCKSIZE)
+# define DEC "0123456789"
+# define HEX "0123456789ABCDEF"
 
 /*
 ** Masks used to interpret block settings
@@ -105,6 +106,7 @@ typedef struct		s_chunk {
 
 # define MMAP_PROTECTIONS (PROT_READ | PROT_WRITE)
 # define MMAP_FLAGS (MAP_ANON | MAP_PRIVATE)
+# define IS_EMPTY(b) ((b && ~(b->metadata & ALLOCED) && (b->metadata & BLOCK)))
 
 /*
 ** Macros used to calculate address of chunk & pointer
@@ -114,9 +116,25 @@ typedef struct		s_chunk {
 # define GET_CHUNK_POINTER(x) ((t_chunk*)((char*)(((t_chunk*)x) - 1) - OFFSET))
 
 /*
+** Misc
+*/
+
+# define MIN(x, y) ((x) < (y) ? (x) : (y))
+
+/*
 ** Internal functions
 */
 
+size_t				ft_intmaxtoa_base(char *string
+							, intmax_t nbr
+							, int8_t base
+							, const char *lookup);
+void				*ft_memcpy(void *dst_void
+							, const void *src_void
+							, size_t len);
+void				*ft_memmove(void *dst_void
+							, const void *src_void
+							, size_t length);
 t_chunk				*request_space(t_chunk *last, size_t size);
 t_chunk				*next_free_chunk(t_chunk **last, size_t size, void *bin);
 
@@ -124,8 +142,23 @@ t_chunk				*next_free_chunk(t_chunk **last, size_t size, void *bin);
 ** Exported functions
 */
 
+void				nomalloc_log(int fd, const char *fmt, ...);
 void				show_alloc_mem();
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
 void				free(void *ptr);
+
+/*
+** Debug statements used when compiled with __DEBUG__ variable defined
+*/
+
+# ifdef __DEBUG__
+#  include <stdio.h>
+#  define DEBUG_LOG(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__)
+#  define DEBUG_PRINT(str) fprintf(stderr, str)
+# else
+#  define DEBUG_LOG(fmt, ...) do {} while (0)
+#  define DEBUG_PRINT(str) do {} while (0)
+# endif
+
 #endif

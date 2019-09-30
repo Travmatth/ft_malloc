@@ -1,12 +1,32 @@
 {
     // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
-    "version": "0.1.0",
+    "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build",
+            "label": "build-custom",
             "command": "make",
             "args": ["TEST=FULL", "CASE=custom_tests.c", "test-debug"],
+            "showOutput": "always",
+            "isBuildCommand": true,
+            "isShellCommand": true,
+            "problemMatcher": {
+                "owner": "c",
+                "fileLocation": ["relative", "${workspaceRoot}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            }
+        },
+        {
+            "label": "build-log",
+            "command": "make",
+            "args": ["TEST=FULL", "CASE=log_tests.c", "test-debug"],
             "showOutput": "always",
             "isBuildCommand": true,
             "isShellCommand": true,

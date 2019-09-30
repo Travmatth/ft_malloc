@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/26 13:57:50 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/27 14:41:47 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	*procure_large(size_t size)
 		if ((chunk = request_space(last, META_SIZE + size + OFFSET)) == NULL)
 			return (chunk);
 	}
-	chunk->metadata |= ALLOCED;
+	chunk->metadata |= (ALLOCED | LARGE_BIN);
 	chunk->size = size;
 	ptr = GET_MEM_POINTER(chunk);
 	DEBUG_LOG("Malloc returning pointer: %p\n", ptr);
