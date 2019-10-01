@@ -6,56 +6,55 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:20 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/28 19:04:04 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/30 19:02:46 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/internal.h"
 
 /*
-** Iterate over chunks and verify all chunks within bin are free
+** Once unused allocation has been identified, call munmap to free
 */
 
-int		all_chunks_free(t_chunk *chunk)
+void	free_chunk(void **bin, t_chunk *c, t_chunk *n)
 {
-	t_chunk	*next;
+	int		val;
 
-	if (!chunk || (chunk->metadata & ALLOCED))
-		return (0);
-	next = chunk;
-	while (next)
-	{
-		if (next->metadata & BLOCK)
-			return (1);
-		else if (next->metadata & ALLOCED)
-			return (0);
-		next = next->next;
-	}
-	return (0);
+	val = munmap(c, META_SIZE + OFFSET + c->size);
+	DEBUG_LOG("Munmap block %p: %d\n", (void*)c, val);
+	*bin = n;
 }
 
 /*
 ** munmap bin if all chunks unused
 */
 
-void	free_bin(void **bin)
+void	find_free_bins(void **bin)
 {
 	t_chunk	*c;
-	int		can_free;
-	int		val;
+	t_chunk	*n;
+	int		in_use;
 
-	while ((c = *(t_chunk**)bin))
+	c = *(t_chunk**)bin;
+	while (c)
 	{
-		can_free = (c && IS_EMPTY(c));
-		can_free = can_free && (!c->next || IS_EMPTY(c->next));
-		if (can_free && all_chunks_free(c))
+		n = c->next;
+		if (!(c->metadata & ALLOCED) && (!n || !(n->metadata & BLOCK)))
 		{
-			*bin = c->next;
-			val = munmap(c, META_SIZE + OFFSET + c->size);
-			DEBUG_LOG("Munmap block %p: %d\n", (void*)c, val);
+			in_use = 0;
+			while (n && !(n->metadata & BLOCK))
+			{
+				if (n->metadata & ALLOCED)
+				{
+					in_use = 1;
+					break ;
+				}
+				n = n->next;
+			}
+			if (!in_use && (c->metadata & BLOCK))
+				free_chunk(bin, c, n);
 		}
-		else
-			*bin = c->next;
+		c = n;
 	}
 }
 
@@ -66,23 +65,23 @@ void	free_bin(void **bin)
 
 void	coalesce_bin(void **bin)
 {
-	t_chunk	*next;
+	t_chunk	*n;
 	t_chunk	*c;
 
 	c = *(t_chunk**)bin;
 	while (c)
 	{
-		next = c->next;
-		while (next && ~(c->metadata & ALLOCED) && ~(next->metadata & ALLOCED))
+		n = c->next;
+		while (c && !(c->metadata & ALLOCED) && n && !(n->metadata & ALLOCED))
 		{
-			DEBUG_LOG("Combining chunks %p, %p\n", (void*)c, (void*)next);
-			c->size += META_SIZE + OFFSET + next->size;
-			c->next = next->next;
-			next = next->next;
+			DEBUG_LOG("Combining chunks %p, %p\n", (void*)c, (void*)n);
+			c->size += META_SIZE + OFFSET + n->size;
+			c->next = n->next;
+			n = n->next;
 		}
-		c = next;
+		c = n;
 	}
-	free_bin(bin);
+	find_free_bins(bin);
 }
 
 /*
@@ -123,11 +122,11 @@ void	free(void *pointer)
 		errno = ENOMEM;
 	}
 	chunk->metadata &= ~ALLOCED;
-	if (chunk->metadata & LARGE_BIN)
+	if (!(chunk->metadata & LARGE_BIN))
 	{
-		free_large_bin(chunk);
-		return ;
+		bin = IS_TINY(chunk->size) ? &g_bins.tiny_bin : &g_bins.small_bin;
+		coalesce_bin(bin);
 	}
-	bin = IS_TINY(chunk->size) ? &g_bins.tiny_bin : &g_bins.small_bin;
-	coalesce_bin(bin);
+	else
+		free_large_bin(chunk);
 }

@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/27 14:41:47 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/30 17:28:17 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 	chunk->metadata |= (ALLOCED | (IS_TINY(size) ? TINY_BIN : SMALL_BIN));
 	ptr = GET_MEM_POINTER(chunk);
 	if ((size_t)ptr % alignof(max_align_t))
-		printf("ERROR: Unaligned ptr procured\n");
+		DEBUG_PRINT("ERROR: Unaligned ptr procured\n");
 	DEBUG_LOG("Malloc returning pointer: %p\n", ptr);
 	return (ptr);
 }

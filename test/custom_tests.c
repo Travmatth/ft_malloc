@@ -5,7 +5,15 @@
 #include <sys/wait.h>
 #include "../malloc.h"
 
-int	test_cpy() {
+int	test_single_malloc()
+{
+}
+
+int	test_single_free()
+{
+}
+
+int	test_multi_malloc() {
 	int *arr = malloc(sizeof(int*))
 		, *next = malloc(sizeof(int) * 5);
 
@@ -32,7 +40,7 @@ int test_take_next_free() {
 	free(first);
 	int *third = malloc(sizeof(int));
 	*third = 22;
-	if (*third != 22 || *second != 24)
+	if (*first != 22 || *second != 24)
 		return 1;
 	return 0;
 }
@@ -114,7 +122,7 @@ int	test_coalesce_adjacent() {
 }
 
 int		(*funcs[6])(void) = {
-	test_cpy,
+	test_multi_malloc,
 	test_take_next_free,
 	test_split_next_free,
 	test_skip_next_free,
@@ -123,7 +131,6 @@ int		(*funcs[6])(void) = {
 };
 
 int		main(void) {
-	// test_coalesce_adjacent();
 	for (int i = 0; i < 6; i++) {
 		if (funcs[i]()) {
 			printf("Error: test %d failed\n", i);

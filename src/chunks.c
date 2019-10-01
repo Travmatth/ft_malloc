@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 15:07:24 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/26 13:46:05 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/30 17:37:45 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ t_chunk	*next_free_chunk(t_chunk **last, size_t size, void *bin)
 		curr = curr->next;
 	}
 	if (curr != NULL)
-	{
 		DEBUG_LOG("Free chunk found to allocate: %p\n", (void*)curr);
-	}
 	return (curr);
 }

@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 14:27:22 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/30 17:54:20 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct		s_chunk {
 
 # define MMAP_PROTECTIONS (PROT_READ | PROT_WRITE)
 # define MMAP_FLAGS (MAP_ANON | MAP_PRIVATE)
-# define IS_EMPTY(b) ((b && ~(b->metadata & ALLOCED) && (b->metadata & BLOCK)))
+# define CHUNK_IS_FREE(c) (!(c->metadata & ALLOCED))
 
 /*
 ** Macros used to calculate address of chunk & pointer
@@ -153,9 +153,9 @@ void				free(void *ptr);
 */
 
 # ifdef __DEBUG__
-#  include <stdio.h>
-#  define DEBUG_LOG(fmt, ...) fprintf(stderr, fmt, __VA_ARGS__)
-#  define DEBUG_PRINT(str) fprintf(stderr, str)
+# define STDERR 2
+#  define DEBUG_LOG(fmt, ...) nomalloc_log(STDERR, fmt, __VA_ARGS__)
+#  define DEBUG_PRINT(str) nomalloc_log(STDERR, str)
 # else
 #  define DEBUG_LOG(fmt, ...) do {} while (0)
 #  define DEBUG_PRINT(str) do {} while (0)

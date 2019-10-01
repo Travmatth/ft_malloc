@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 12:17:45 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 16:24:57 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/09/30 17:20:19 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	fmt_print(int fd, const char *fmt, int *idx, va_list ap)
 {
 	char	buf[19];
 	size_t	len;
-	int		i;
 
 	*idx += 1;
 	if (!fmt[*idx])
