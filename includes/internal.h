@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/03 15:28:32 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/03 16:10:28 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,11 @@ typedef struct		s_chunk {
 ** large_bin: allocations > 4kb
 */
 
-# define TINY_SIZE (4 * PAGE_SIZE)
-# define SMALL_SIZE (8 * PAGE_SIZE)
-# define IS_TINY(x) (x < 512)
-# define IS_SMALL(x) (x >= 512)
-# define IS_LARGE(x) (x >= PAGE_SIZE)
+# define TINY_SIZE (1 * PAGE_SIZE)
+# define SMALL_SIZE (25 * PAGE_SIZE)
+# define IS_TINY(x) (x <= 36)
+# define IS_SMALL(x) (x > 36 && x <= 1024)
+# define IS_LARGE(x) (x > 1024)
 
 /*
 ** Macros used for allocations
