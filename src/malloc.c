@@ -60,7 +60,7 @@ void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 		if ((chunk = request_space(last, PAGE_SIZE)) == NULL)
 			return (chunk);
 	}
-	else if (ALIGNED_SIZE(chunk->size) > META_SIZE + aligned + OFFSET)
+	if (ALIGNED_SIZE(chunk->size) > META_SIZE + aligned + OFFSET)
 		split_block(chunk, aligned);
 	chunk->size = size;
 	chunk->metadata |= (ALLOCED | (IS_TINY(size) ? TINY_BIN : SMALL_BIN));
