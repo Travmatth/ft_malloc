@@ -119,6 +119,7 @@ typedef struct		s_chunk {
 ** Misc
 */
 
+# define STDOUT 1
 # define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 /*
@@ -151,7 +152,7 @@ void				free(void *ptr);
 */
 
 # ifdef __DEBUG__
-# define STDERR 2
+#  define STDERR 2
 #  define DEBUG_LOG(fmt, ...) nomalloc_log(STDERR, fmt, __VA_ARGS__)
 #  define DEBUG_PRINT(str) nomalloc_log(STDERR, str)
 # else

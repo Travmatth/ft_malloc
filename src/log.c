@@ -6,11 +6,19 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 12:17:45 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 17:20:19 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/02 16:56:06 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/internal.h"
+
+void	fmt_short_pointer(int fd, char buf[19], va_list ap)
+{
+	size_t	len;
+
+	len = ft_intmaxtoa_base(buf, (intmax_t)va_arg(ap, ULL), 16, HEX);
+	write(fd, buf, len);
+}
 
 void	fmt_pointer(int fd, char buf[19], va_list ap)
 {
@@ -55,6 +63,8 @@ void	fmt_print(int fd, const char *fmt, int *idx, va_list ap)
 	}
 	else if (fmt[*idx] == 'p')
 		fmt_pointer(fd, buf, ap);
+	else if (fmt[*idx] == 'P')
+		fmt_short_pointer(fd, buf, ap);
 	*idx += 1;
 }
 
