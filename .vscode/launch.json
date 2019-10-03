@@ -5,6 +5,41 @@
 "version": "0.2.0",
 "configurations": [
     {
+        "name": "correction-tests",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${workspaceRoot}/malloc_test",
+		// "args": [],
+		// "env": {},
+        "stopAtEntry": false,
+        "cwd": "${workspaceRoot}",
+        "preLaunchTask": "build-corrections",
+		"externalConsole": false,
+        "linux": {
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        "osx": {
+            "MIMode": "lldb"
+        },
+        "windows": {
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+    },
+    {
         "name": "custom-tests",
         "type": "cppdbg",
         "request": "launch",
