@@ -3,7 +3,7 @@ ifeq ($(HOSTTYPE),)
 endif
 DEBUG =
 ifdef TEST
-		DEBUG = -g -fsanitize=address -fsanitize=undefined
+		DEBUG = -g -fsanitize=undefined
 else
 		DEBUG =
 endif
@@ -14,6 +14,7 @@ endif
 IS_DEBUG = 
 NAME = libft_malloc_$(HOSTTYPE).so
 TESTNAME = malloc_test
+TESTS = test0 test1 test2 test3 test3_1 test4 test5
 CFLAGS = -Wall -Wextra -Werror -Wpedantic
 DYLIB = -shared -exported_symbols_list exported.syms 
 TESTFLAGS = -I./includes -L. -lft_malloc
@@ -49,6 +50,12 @@ test-logs: set-debug all
 
 test: all
 	@$(CC) $(IS_DEBUG) $(DEBUG) $(TESTFLAGS) $(LDFLAGS) test/$(CASE) -o $(TESTNAME)
+
+compile-tests:
+	@./test/compile.sh
+
+clean-tests:
+	@rm $(TESTS)
 
 clean:
 	@echo -n 'Cleaning ft_malloc object files... '
