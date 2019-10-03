@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/02 17:05:37 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/03 16:09:58 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 		return (NULL);
 	if ((chunk = next_free_chunk(&last, aligned, *bin)) == NULL)
 	{
-		if ((chunk = request_space(last, bin_size)) == NULL)
+		if ((chunk = request_space(last, PAGE_SIZE)) == NULL)
 			return (chunk);
 	}
 	else if (ALIGNED_SIZE(chunk->size) > META_SIZE + aligned + OFFSET)
