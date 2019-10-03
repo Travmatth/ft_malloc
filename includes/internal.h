@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 17:54:20 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/02 17:01:10 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,15 @@ typedef struct		s_chunk {
 }					t_chunk;
 
 /*
+** Macros used for calculating chunk sizes
+*/
+
+# define META_SIZE (sizeof(t_chunk))
+# define PAGE_SIZE ((size_t)getpagesize())
+# define OFFSET (alignof(max_align_t) - sizeof(t_chunk)) % alignof(max_align_t)
+# define ALIGNED_SIZE(x) ((x + ((alignof(max_align_t) - x) % alignof(max_align_t))))
+
+/*
 ** Bins used to reference mmapped sections of memory
 ** tiny_bin: allocations < 1kb
 ** small_bin: allocations >= 1kb && < 4kb
@@ -123,11 +132,9 @@ size_t				ft_intmaxtoa_base(char *string
 void				*ft_memcpy(void *dst_void
 							, const void *src_void
 							, size_t len);
-void				*ft_memmove(void *dst_void
-							, const void *src_void
-							, size_t length);
 t_chunk				*request_space(t_chunk *last, size_t size);
 t_chunk				*next_free_chunk(t_chunk **last, size_t size, void *bin);
+int					is_chunk(t_chunk *chunk);
 
 /*
 ** Exported functions

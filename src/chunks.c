@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/18 15:07:24 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 17:37:45 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/02 17:07:48 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ t_chunk	*next_free_chunk(t_chunk **last, size_t size, void *bin)
 	t_chunk	*curr;
 
 	curr = (t_chunk *)bin;
-	while (curr && (!!(curr->metadata & ALLOCED) || (curr->size < size)))
+	while (curr &&
+		(!!(curr->metadata & ALLOCED) || (ALIGNED_SIZE(curr->size) < size)))
 	{
 		*last = curr;
 		curr = curr->next;

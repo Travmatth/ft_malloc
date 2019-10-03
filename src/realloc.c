@@ -6,30 +6,24 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:48:33 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 14:01:14 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/02 17:09:51 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/internal.h"
 
-void	*realloc(void *pointer, size_t size)
+/*
+** Realloc_chunk moves contents of given pointer to new pointer with space size
+*/
+
+void	*realloc_chunk(void *pointer, size_t size)
 {
 	t_chunk	*old_chunk;
 	void	*new;
 	size_t	new_size;
 
-	if ((size_t)pointer % 8)
-	{
-		DEBUG_LOG("Realloc attempted on misaligned pointer: %p\n", pointer);
-		return (NULL);
-	}
-	else if (pointer == NULL)
-	{
-		DEBUG_LOG("Realloc returning new pointer of size: %zu\n", size);
-		return (malloc(size));
-	}
 	old_chunk = GET_CHUNK_POINTER(pointer);
-	new_size = MIN(size, old_chunk->size);
+	new_size = MIN(size, ALIGNED_SIZE(old_chunk->size));
 	if ((new = malloc(size)) != NULL)
 	{
 		ft_memcpy((void*)new, pointer, new_size);

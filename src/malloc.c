@@ -6,13 +6,18 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 06:47:17 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 17:28:17 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/02 17:05:37 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/internal.h"
 
 t_bins	g_bins;
+
+/*
+** split_block splits requested chunk into a chunk of requested size of the
+** following empty chunk
+*/
 
 void	split_block(t_chunk *chunk, size_t size)
 {
@@ -22,7 +27,7 @@ void	split_block(t_chunk *chunk, size_t size)
 	size += META_SIZE + OFFSET;
 	next = (char*)(chunk) + size;
 	next_chunk = (t_chunk*)next;
-	next_chunk->size = chunk->size - size;
+	next_chunk->size = ALIGNED_SIZE(chunk->size) - size;
 	next_chunk->metadata = 0;
 	next_chunk->next = NULL;
 	if (chunk->next != NULL)
@@ -33,6 +38,11 @@ void	split_block(t_chunk *chunk, size_t size)
 			, (void*)next_chunk);
 }
 
+/*
+** procure_pointer finds size spaced chunks within mmapped bins, or requests new
+** pages if bin does not contain sufficient memory
+*/
+
 void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 {
 	void	*ptr;
@@ -41,7 +51,7 @@ void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 	size_t	aligned;
 
 	DEBUG_PRINT("Procuring memory for bin allocation\n");
-	aligned = size + ((alignof(max_align_t) - size) % alignof(max_align_t));
+	aligned = ALIGNED_SIZE(size);
 	last = (t_chunk*)*bin;
 	if (!*bin && !(*bin = request_space(NULL, bin_size)))
 		return (NULL);
@@ -50,9 +60,9 @@ void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 		if ((chunk = request_space(last, bin_size)) == NULL)
 			return (chunk);
 	}
-	else if (chunk->size > META_SIZE + aligned + OFFSET)
+	else if (ALIGNED_SIZE(chunk->size) > META_SIZE + aligned + OFFSET)
 		split_block(chunk, aligned);
-	chunk->size = aligned;
+	chunk->size = size;
 	chunk->metadata |= (ALLOCED | (IS_TINY(size) ? TINY_BIN : SMALL_BIN));
 	ptr = GET_MEM_POINTER(chunk);
 	if ((size_t)ptr % alignof(max_align_t))
@@ -61,18 +71,21 @@ void	*procure_pointer(size_t size, void **bin, size_t bin_size)
 	return (ptr);
 }
 
+/*
+** procure_large directly requests mmapped memory and connects it to large bin
+*/
+
 void	*procure_large(size_t size)
 {
 	t_chunk	*last;
 	t_chunk	*chunk;
-	void	*bin;
 	void	*ptr;
 
 	DEBUG_PRINT("Procuring memory for large allocation\n");
-	bin = g_bins.large_bin;
-	if (!bin && !(bin = request_space(NULL, META_SIZE + size + OFFSET)))
+	if (!g_bins.large_bin && !(g_bins.large_bin = request_space(
+		NULL, META_SIZE + size + OFFSET)))
 		return (NULL);
-	if ((chunk = next_free_chunk(&last, size, bin)) == NULL)
+	if ((chunk = next_free_chunk(&last, size, g_bins.large_bin)) == NULL)
 	{
 		if ((chunk = request_space(last, META_SIZE + size + OFFSET)) == NULL)
 			return (chunk);
@@ -83,6 +96,11 @@ void	*procure_large(size_t size)
 	DEBUG_LOG("Malloc returning pointer: %p\n", ptr);
 	return (ptr);
 }
+
+/*
+** Malloc requests and tracks mmapped memory to allow users
+** to request pointers to chunks of size
+*/
 
 void	*malloc(size_t size)
 {

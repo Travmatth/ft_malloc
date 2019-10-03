@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 14:00:45 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/09/30 14:24:36 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/02 15:24:38 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,26 +83,26 @@ void			*ft_memcpy(void *dst_void, const void *src_void, size_t len)
 	return (dst_void);
 }
 
-void			*ft_memmove(void *dst_void, const void *src_void, size_t length)
+int				contains_chunk(t_chunk *bin, t_chunk *chunk)
 {
-	char		*dst;
-	const char	*src;
+	while (bin)
+	{
+		if (chunk == bin)
+			return (1);
+		bin = bin->next;
+	}
+	return (0);
+}
 
-	dst = dst_void;
-	src = src_void;
-	if (src < dst && dst < src + length)
-	{
-		src += length;
-		dst += length;
-		while (length--)
-			*--dst = *--src;
-	}
-	else
-	{
-		length = !TOO_SMALL(length) && !UNALIGNED(src, dst)
-			? copy_by_chunk(&dst, &src, length) : length;
-		while (length--)
-			*dst++ = *src++;
-	}
-	return (dst_void);
+int				is_chunk(t_chunk *chunk)
+{
+	t_chunk	*bin;
+
+	if ((bin = (t_chunk*)g_bins.large_bin) && contains_chunk(bin, chunk))
+		return (1);
+	else if ((bin = (t_chunk*)g_bins.small_bin) && contains_chunk(bin, chunk))
+		return (1);
+	else if ((bin = (t_chunk*)g_bins.tiny_bin) && contains_chunk(bin, chunk))
+		return (1);
+	return (0);
 }
