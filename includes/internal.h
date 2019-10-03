@@ -85,20 +85,11 @@ typedef struct		s_chunk {
 ** large_bin: allocations > 4kb
 */
 
-# define MB 1000000
-# define TINY_SIZE (2 * MB)
-# define SMALL_SIZE (16 * MB)
-# define IS_TINY(x) (x < 500)
-# define IS_SMALL(x) (x >= 500)
+# define TINY_SIZE (4 * PAGE_SIZE)
+# define SMALL_SIZE (8 * PAGE_SIZE)
+# define IS_TINY(x) (x < 512)
+# define IS_SMALL(x) (x >= 512)
 # define IS_LARGE(x) (x >= PAGE_SIZE)
-
-/*
-** Macros used for calculating chunk sizes
-*/
-
-# define META_SIZE (sizeof(t_chunk))
-# define PAGE_SIZE ((size_t)getpagesize())
-# define OFFSET (alignof(max_align_t) - sizeof(t_chunk)) % alignof(max_align_t)
 
 /*
 ** Macros used for allocations
