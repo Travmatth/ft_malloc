@@ -6,7 +6,7 @@
 /*   By: tmatthew <tmatthew@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/06 07:17:23 by tmatthew          #+#    #+#             */
-/*   Updated: 2019/10/02 17:01:10 by tmatthew         ###   ########.fr       */
+/*   Updated: 2019/10/03 15:28:32 by tmatthew         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ typedef struct		s_chunk {
 # define META_SIZE (sizeof(t_chunk))
 # define PAGE_SIZE ((size_t)getpagesize())
 # define OFFSET (alignof(max_align_t) - sizeof(t_chunk)) % alignof(max_align_t)
-# define ALIGNED_SIZE(x) ((x + ((alignof(max_align_t) - x) % alignof(max_align_t))))
+# define ALIGN (alignof(max_align_t))
+# define ALIGNED_SIZE(x) ((x + ((alignof(max_align_t) - x) % ALIGN)))
 
 /*
 ** Bins used to reference mmapped sections of memory
