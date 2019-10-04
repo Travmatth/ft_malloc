@@ -239,7 +239,6 @@ int		(*funcs[NUM_TESTS])(void) = {
 };
 
 int		main(void) {
-	// test_show_alloc_mem();
 	for (int i = 0; i < NUM_TESTS; i++) {
 		if (funcs[i]()) {
 			printf("Error: test %d failed\n", i);
