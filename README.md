@@ -1,7 +1,7 @@
 # FT_MALLOC
 
 ## DESIGN
-ft_malloc uses a simple first-fit algorithm to determine the next chunk of specified size available to allocate in mmapped memory. Chunks are stored in size-dependent buckets and buckets are extended as needed to accommodate allocated chunks. On free, chunks are coalesced so that adjacent chunks are combined into a single chunk. Empty pages allocated outside of the initial bin size are automatically munmapped when freeing the last associated chunk.
+ft_malloc uses a simple first-fit algorithm to determine the next chunk of specified size available to allocate in mmapped memory. Chunks are stored in size-dependent buckets, buckets are extended as needed to accommodate allocated chunks. On free, chunks are coalesced so that adjacent chunks are combined into a single chunk. Empty pages allocated outside of the initial bin size are automatically munmapped when freeing the last associated chunk.
 
 ## USE
 ## REQUIREMENTS
